@@ -80,13 +80,14 @@ button {
   border-radius: 10px;
   background-color: var(--blue-light);
   font-size: 18px;
-  font-variant: var(--white);
+  font-weight: 550;
 }
 button:hover {
   background-color: var(--blue-dark);
 }
 
 .legend {
+  margin-top: -7px;
   font-size: 14px;
   color: var(--grey);
   display: block;
