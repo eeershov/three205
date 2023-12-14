@@ -1,12 +1,9 @@
-import { Router, Request, Response } from "express";
+import e, { Router, Request, Response } from "express";
+import { User, ApiResponse } from '../interfaces';
 import fs from 'fs';
 
 const router = Router();
-
-interface User {
-  email: string;
-  number: number;
-}
+const RESPONSE_DELAY = 300; // 5000 in prod
 
 // fast sync file read and type convertion
 const JSON_DATA: Record<keyof User, string>[] = await JSON.parse(
@@ -20,10 +17,38 @@ const USERS_DATA: User[] = JSON_DATA.map(user => {
 
 function getUsers(req: Request, res: Response) {
   const email = req.query.email;
+  let number: number | null = null;
+  if (req.query.number) number = parseInt(req.query.number.toString());
+
   const foundUsers = USERS_DATA.filter(user => {
-    return user.email === email;
+    if (number != null) {
+      return user.email === email && user.number === number;
+    }
+      return user.email === email;
   })
-  res.send(foundUsers);
+
+  let response: ApiResponse<User[]>;
+  if (foundUsers.length === 0) {
+    response = new ApiResponse({
+      success: false,
+      code: 200, // as not to process the 204 code separately on the client side
+      error: true,
+      message: 'users not found',
+      data: []
+    });
+  } else {
+    response = new ApiResponse({
+      success: true,
+      code: 200,
+      error: false,
+      message: 'users found',
+      data: foundUsers
+    });
+  }
+
+  setTimeout(() => {
+    res.status(response.code).send(response);
+  }, RESPONSE_DELAY);
 }
 
 router.get('/users', getUsers);
