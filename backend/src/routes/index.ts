@@ -1,9 +1,9 @@
-import e, { Router, Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { User, ApiResponse } from '../interfaces';
 import fs from 'fs';
 
 const router = Router();
-const RESPONSE_DELAY = 300; // 5000 in prod
+const RESPONSE_DELAY = 5000; // 5000 in prod
 
 // fast sync file read and type convertion
 const JSON_DATA: Record<keyof User, string>[] = await JSON.parse(
@@ -15,7 +15,10 @@ const USERS_DATA: User[] = JSON_DATA.map(user => {
   }
 })
 
-function getUsers(req: Request, res: Response) {
+
+let timeoutID: NodeJS.Timeout | null = null;
+async function getUsers(req: Request, res: Response) {
+  if (timeoutID) clearTimeout(timeoutID); // cancel ongoing response
   const email = req.query.email;
   let number: number | null = null;
   if (req.query.number) number = parseInt(req.query.number.toString());
@@ -46,9 +49,10 @@ function getUsers(req: Request, res: Response) {
     });
   }
 
-  setTimeout(() => {
+  timeoutID = setTimeout(() => {
     res.status(response.code).send(response);
-  }, RESPONSE_DELAY);
+  }, RESPONSE_DELAY
+  );
 }
 
 router.get('/users', getUsers);
