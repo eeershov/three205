@@ -3,8 +3,8 @@ import { ApiResponse, User } from "../interfaces"
 function UsersSection({data} :{data: ApiResponse<User[]>}) {
   const users = data.data;
   return (
-    <section>
-      {
+    <>
+    {
         users.length > 0 
         ? <section>
             <h2>Clients information</h2>
@@ -19,7 +19,8 @@ function UsersSection({data} :{data: ApiResponse<User[]>}) {
           </section>
         : null
       }
-    </section>
+    </>
+
   )
 }
 
