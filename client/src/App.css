@@ -24,11 +24,10 @@ body {
   background-color: var(--bg-grey);
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
 }
 
 form {
+  margin-top: 5rem;
   box-sizing: border-box;
   background-color: var(--white);
   display: flex;
