@@ -87,6 +87,9 @@ button {
 button:hover {
   background-color: var(--blue-dark);
 }
+button:disabled {
+  background-color: var(--blue-disabled);
+}
 
 .legend {
   margin-top: -7px;
