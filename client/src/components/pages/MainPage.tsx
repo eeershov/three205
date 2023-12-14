@@ -3,6 +3,7 @@ import { User, ApiResponse } from '../../interfaces';
 import UsersSection from '../UsersSection';
 import LoadingStatus from '../LoadingStatus';
 import ErrorMessage from '../ErrorMessage';
+import { maskNumber } from '../../utils/maskNumber';
 
 function MainPage() {
   const [inputs, setInputs] = useState(
@@ -14,14 +15,6 @@ function MainPage() {
   const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputs(prev => ({...prev, email: event.target.value}));
   };
-
-  const maskNumber = (number: string) => {
-    return number
-      .replace(/(\d{2})(?=\d{1})/g, '$1-') // hyphen after every 2 chars
-      .replace(/-+/g, '-') // consecutive hyphens replaced with a single one
-      .replace(/-$/, '') // remove end hyphen
-      .replace(/[^\d-]/g, ''); // remove non-digits and non-hyphens
-  }
 
   const handleNumberInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
