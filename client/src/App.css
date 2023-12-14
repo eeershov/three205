@@ -13,6 +13,11 @@
 * {
   font-size: 18px;
   font-weight: '400';
+  font-family: Arimo, Helvetica, Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button {
@@ -77,6 +82,9 @@ input:focus {
 }
 
 button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 5px;
   padding: 15px;
   color: var(--white);
@@ -119,9 +127,11 @@ article {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: relative;
 }
 .loader img {
+  position: absolute;
+  right: 5px;
   animation: spin 2s linear infinite;
 }
 
