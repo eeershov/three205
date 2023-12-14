@@ -7,6 +7,7 @@ function UsersSection({data} :{data: ApiResponse<User[]>}) {
       {
         users.length > 0 
         ? <section>
+            <h2>Clients information</h2>
             {
               users.map(user =>   
                 <article key={user.email+user.number}>

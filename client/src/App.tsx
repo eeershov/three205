@@ -77,10 +77,9 @@ function App() {
             placeholder="22-22-22"
           />
         </label>
-        <button type="submit">SUBMIT</button>
+        <button type="submit">{<LoadingStatus isLoading={isLoading} />}SUBMIT</button>
         <span className='legend'>* Required fields</span>
       </form>
-      <LoadingStatus isLoading={isLoading} />
       <ErrorMessage data={data} />
       <UsersSection data={data} />
     </>
