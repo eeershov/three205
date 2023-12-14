@@ -4,6 +4,7 @@ import UsersSection from '../UsersSection';
 import LoadingStatus from '../LoadingStatus';
 import ErrorMessage from '../ErrorMessage';
 import { maskNumber } from '../../utils/maskNumber';
+import { backendUrl } from '../../utils/address';
 
 function MainPage() {
   const [inputs, setInputs] = useState(
@@ -32,7 +33,7 @@ function MainPage() {
       queryParams.append('email', inputs.email);
       queryParams.append('number', inputs.number.actualNumber);
   
-      const url = `http://localhost:9090/api/users?${queryParams.toString()}`;
+      const url = `${backendUrl}?${queryParams.toString()}`;
   
       const response = await fetch(url, {
         method: 'GET',
