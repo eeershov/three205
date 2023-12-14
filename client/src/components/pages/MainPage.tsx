@@ -5,15 +5,14 @@ import LoadingStatus from '../LoadingStatus';
 import ErrorMessage from '../ErrorMessage';
 
 function MainPage() {
-  const [email, setEmail] = useState('');
-  const [number, setNumber] = useState({actualNumber: '', maskedNumber: ''});
+  const [inputs, setInputs] = useState(
+    {email: '', number: {actualNumber: '', maskedNumber: ''}});
   const [data, setData] = useState<ApiResponse<User[]>>(
-    {success: false, code: 0, message: '', error: false, data: []
-  });
+    {success: false, code: 0, message: '', error: false, data: []});
   const [isLoading, setIsLoading] = useState(false);
 
   const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+    setInputs(prev => ({...prev, email: event.target.value}));
   };
 
   const maskNumber = (number: string) => {
@@ -28,7 +27,7 @@ function MainPage() {
     const inputValue = event.target.value;
     const maskedNumber = maskNumber(inputValue);
     const actualNumber = inputValue.replace(/[^\d]/g, ''); // remove non digits
-    setNumber({ maskedNumber, actualNumber });
+    setInputs(prev => ({...prev, number: {actualNumber, maskedNumber}}));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -37,8 +36,8 @@ function MainPage() {
   
     try {
       const queryParams = new URLSearchParams();
-      queryParams.append('email', email);
-      queryParams.append('number', number.actualNumber);
+      queryParams.append('email', inputs.email);
+      queryParams.append('number', inputs.number.actualNumber);
   
       const url = `http://localhost:9090/api/users?${queryParams.toString()}`;
   
@@ -65,7 +64,7 @@ function MainPage() {
           Enter e-mail*
           <input
             type="text"
-            value={email}
+            value={inputs.email}
             onChange={handleEmailInput}
             placeholder="ivanov@gmail.com"
             required
@@ -75,7 +74,7 @@ function MainPage() {
           Enter number
           <input
             type="text"
-            value={number.maskedNumber}
+            value={inputs.number.maskedNumber}
             onChange={handleNumberInput}
             placeholder="22-22-22"
           />
