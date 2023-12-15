@@ -14,10 +14,14 @@ const USERS_DATA: User[] = JSON_DATA.map(user => {
   }
 })
 
-
-let timeoutID: NodeJS.Timeout | null = null;
+const timeoutByIP: {[key: string] : NodeJS.Timeout} = {};
 export async function getUsers(req: Request, res: Response) {
-  if (timeoutID) clearTimeout(timeoutID); // cancel ongoing response
+  let clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'disconnected';
+  if (clientIP) clientIP = clientIP.toString();
+  if (timeoutByIP.hasOwnProperty(clientIP)) {
+    clearTimeout(timeoutByIP[clientIP]); // cancel ongoing response
+  }
+
   const email = req.query.email;
   let number: number | null = null;
   if (req.query.number) number = parseInt(req.query.number.toString());
@@ -48,8 +52,8 @@ export async function getUsers(req: Request, res: Response) {
     });
   }
 
-  timeoutID = setTimeout(() => {
+  const timeoutID = setTimeout(() => {
     res.status(response.code).send(response);
-  }, RESPONSE_DELAY
-  );
+  }, RESPONSE_DELAY);
+  timeoutByIP[clientIP] = timeoutID;
 }
